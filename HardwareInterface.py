@@ -40,7 +40,7 @@ class HardwareInterface(object):
         self.pwm = GPIO.PWM(SPEAKER_PIN, SPEAKER_DUTYCYCLE)
         self.qualityButtonHandler = qualityButtonHandler
         self.recordButtonHandler = recordButtonHandler
-            
+
     def cleanup(self):
         self.pwm.stop()
         GPIO.cleanup()
@@ -56,7 +56,7 @@ class HardwareInterface(object):
         self.pwm.start(SPEAKER_DUTYCYCLE)
         time.sleep(0.25)
         self.pwm.stop()
-    
+
     def switch_light(self, recordingQuality, state):
         channel = None
         if recordingQuality is RecordingQuality.biggest:
@@ -86,17 +86,17 @@ class HardwareInterface(object):
             raise RuntimeError("Unknown button pushed on channel %d" % (channel))
         if quality:
             self.qualityButtonHandler(quality)
-    
+
     def handle_record_button(self, channel):
         print "record button tapped"
         self.recordButtonHandler()
-    
+
     def configure_GPIO(self):
         """Bind GPIO pins for inputs and outputs"""
-    
+
         # Use board pin numbers instead of GPIO numbers
         GPIO.setmode(GPIO.BOARD)
-    
+
         # Set up LED pins for output
         GPIO.setup(BIG_LED_PIN, GPIO.OUT)
         GPIO.setup(MED_LED_PIN, GPIO.OUT)
@@ -111,18 +111,18 @@ class HardwareInterface(object):
 
         # Set up speaker
         GPIO.setup(SPEAKER_PIN, GPIO.OUT)
-    
+
         # Set up button handler functions
         GPIO.add_event_detect(BIG_BUTTON_PIN, GPIO.RISING, callback=self.handle_quality_button, bouncetime=BOUNCE_TIME)
         GPIO.add_event_detect(MED_BUTTON_PIN, GPIO.RISING, callback=self.handle_quality_button, bouncetime=BOUNCE_TIME)
         GPIO.add_event_detect(FAST_BUTTON_PIN, GPIO.RISING, callback=self.handle_quality_button, bouncetime=BOUNCE_TIME)
         GPIO.add_event_detect(REC_BUTTON_PIN, GPIO.RISING, callback=self.handle_record_button, bouncetime=BOUNCE_TIME)
-    
+
     @property
     def recLEDState(self):
         """The state of the recording LED"""
         return self._recLEDState
-    
+
     @recLEDState.setter
     def recLEDState(self, value):
         if value is RecordingLEDState.off:
