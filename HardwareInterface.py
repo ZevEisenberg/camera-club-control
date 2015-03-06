@@ -74,7 +74,6 @@ class HardwareInterface(object):
         print "TODO: flash channel %d" % (channel)
 
     def handle_quality_button(self, channel):
-        print "handling button on channel: %d" % (channel)
         quality = None
         if channel is BIG_BUTTON_PIN:
             quality = RecordingQuality.biggest
