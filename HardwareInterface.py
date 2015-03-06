@@ -34,11 +34,12 @@ FREQUENCY_BAD = 150
 class HardwareInterface(object):
     """An abstraction to talk to the camera club hardware user interface"""
 
-    def __init__(self, buttonHandler):
+    def __init__(self, qualityButtonHandler, recordButtonHandler):
         self.configure_GPIO()
         self._recLEDState = None
         self.pwm = GPIO.PWM(SPEAKER_PIN, SPEAKER_DUTYCYCLE)
-        self.buttonHandler = buttonHandler
+        self.qualityButtonHandler = qualityButtonHandler
+        self.recordButtonHandler = recordButtonHandler
             
     def cleanup(self):
         self.pwm.stop()
@@ -84,11 +85,11 @@ class HardwareInterface(object):
         else:
             raise RuntimeError("Unknown button pushed on channel %d" % (channel))
         if quality:
-            self.buttonHandler.qualityChanged(quality)
+            self.qualityButtonHandler(quality)
     
     def handle_record_button(self, channel):
         print "record button tapped"
-        self.buttonHandler.recordButtonPressed()
+        self.recordButtonHandler()
     
     def configure_GPIO(self):
         """Bind GPIO pins for inputs and outputs"""
