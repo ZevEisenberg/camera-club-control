@@ -7,7 +7,7 @@ class CameraClubControl(object):
     def __init__(self):
         # TODO: read from disk
         self.recordingQuality = RecordingQuality.biggest
-        self.hw = HardwareInterface(qualityChangeHandler=self)
+        self.hw = HardwareInterface(buttonHandler=self)
         self.camera = CameraInterface()
 
         self.hw.switch_light(RecordingQuality.biggest, True)
@@ -34,6 +34,9 @@ class CameraClubControl(object):
             self.hw.switch_light(RecordingQuality.medium, False)
             self.hw.switch_light(RecordingQuality.fastest, True)
             print "high quality"
+
+    def recordButtonPressed(self):
+        print "record button press handled"
 
     def cleanup(self):
         self.hw.cleanup()

@@ -34,11 +34,11 @@ FREQUENCY_BAD = 150
 class HardwareInterface(object):
     """An abstraction to talk to the camera club hardware user interface"""
 
-    def __init__(self, qualityChangeHandler):
+    def __init__(self, buttonHandler):
         self.configure_GPIO()
         self._recLEDState = None
         self.pwm = GPIO.PWM(SPEAKER_PIN, SPEAKER_DUTYCYCLE)
-        self.qualityChangeHandler = qualityChangeHandler
+        self.buttonHandler = buttonHandler
             
     def cleanup(self):
         self.pwm.stop()
@@ -84,10 +84,11 @@ class HardwareInterface(object):
         else:
             raise RuntimeError("Unknown button pushed on channel %d" % (channel))
         if quality:
-            self.qualityChangeHandler.qualityChanged(quality)
+            self.buttonHandler.qualityChanged(quality)
     
-    def handle_rec_button(self, channel):
-        "record button tapped"
+    def handle_record_button(self, channel):
+        print "record button tapped"
+        self.buttonHandler.recordButtonPressed()
     
     def configure_GPIO(self):
         """Bind GPIO pins for inputs and outputs"""
@@ -114,7 +115,7 @@ class HardwareInterface(object):
         GPIO.add_event_detect(BIG_BUTTON_PIN, GPIO.RISING, callback=self.handle_quality_button, bouncetime=BOUNCE_TIME)
         GPIO.add_event_detect(MED_BUTTON_PIN, GPIO.RISING, callback=self.handle_quality_button, bouncetime=BOUNCE_TIME)
         GPIO.add_event_detect(FAST_BUTTON_PIN, GPIO.RISING, callback=self.handle_quality_button, bouncetime=BOUNCE_TIME)
-        GPIO.add_event_detect(REC_BUTTON_PIN, GPIO.RISING, callback=self.handle_rec_button, bouncetime=BOUNCE_TIME)
+        GPIO.add_event_detect(REC_BUTTON_PIN, GPIO.RISING, callback=self.handle_record_button, bouncetime=BOUNCE_TIME)
     
     @property
     def recLEDState(self):
