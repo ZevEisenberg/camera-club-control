@@ -1,4 +1,5 @@
 import RPi.GPIO as GPIO
+import threading
 import time
 from RecordingQuality import RecordingQuality
 
@@ -10,8 +11,11 @@ class RecordingLEDState(Enum):
     on = 2
     blinking = 3
 
-# Minimum time between two buton presses for them to register as two separate presses
+# Minimum time, in milliseconds, between two buton presses for them to register as two separate presses
 BOUNCE_TIME = 300
+
+# Duration, in seconds, of recording light blinking
+REC_BLINK_TIME = 0.4
 
 # Pin Number Constants
 BIG_LED_PIN = 38
@@ -70,9 +74,25 @@ class HardwareInterface(object):
 
         if channel:
             GPIO.output(channel, 1 if state else 0)
-    
-    def flash_light(self, channel):
-        print "TODO: flash channel %d" % (channel)
+
+    def blink_rec_light(self):
+        print "blinking now"
+        t = threading.Thread(target=self.blink_rec_on)
+        t.start()
+
+    def blink_rec_on(self):
+        if self.recLEDState is RecordingLEDState.blinking:
+            GPIO.output(REC_LED_PIN, 1)
+            time.sleep(REC_BLINK_TIME)
+            t = threading.Thread(target=self.blink_rec_off)
+            t.start()
+
+    def blink_rec_off(self):
+        if self.recLEDState is RecordingLEDState.blinking:
+            GPIO.output(REC_LED_PIN, 0)
+            time.sleep(REC_BLINK_TIME)
+            t = threading.Thread(target=self.blink_rec_on)
+            t.start()
 
     def handle_quality_button(self, channel):
         quality = None
@@ -125,13 +145,12 @@ class HardwareInterface(object):
 
     @recLEDState.setter
     def recLEDState(self, value):
+        self._recLEDState = value
         if value is RecordingLEDState.off:
             GPIO.output(REC_LED_PIN, 0)
         elif value is RecordingLEDState.on:
             GPIO.output(REC_LED_PIN, 1)
         elif value is RecordingLEDState.blinking:
-            print "TODO: add blinking state"
+            self.blink_rec_light()
         else:
             raise ValueError("Unknown recording LED state")
-
-        self._recLEDState = value

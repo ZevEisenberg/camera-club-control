@@ -36,7 +36,15 @@ class CameraClubControl(object):
             print "high quality"
 
     def recordButtonPressed(self):
-        print "record button press handled"
+        rec_state = self.hw.recLEDState
+        if rec_state is RecordingLEDState.on:
+            self.hw.recLEDState = RecordingLEDState.blinking
+        elif rec_state is RecordingLEDState.blinking:
+            self.hw.recLEDState = RecordingLEDState.on
+        elif rec_state is RecordingLEDState.off:
+            self.hw.recLEDState = RecordingLEDState.blinking
+        else:
+            self.hw.recLEDState = RecordingLEDState.blinking
 
     def cleanup(self):
         self.hw.cleanup()
