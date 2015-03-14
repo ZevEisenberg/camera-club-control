@@ -18,6 +18,7 @@ class CameraClubControl(object):
         self.camera.recording = False
 
     def qualityButtonPressed(self, quality):
+        print RecordingQuality.string_from_recording_quality(quality)
         if quality is RecordingQuality.biggest:
             self.hw.play_sound(True)
             self.hw.switch_light(RecordingQuality.biggest, True)
