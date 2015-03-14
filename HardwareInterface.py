@@ -77,7 +77,6 @@ class HardwareInterface(object):
             GPIO.output(channel, 1 if state else 0)
 
     def blink_rec_light(self):
-        print "blinking now"
         t = threading.Thread(target=self.blink_rec_on)
         t.start()
 
@@ -109,7 +108,6 @@ class HardwareInterface(object):
             self.qualityButtonHandler(quality)
 
     def handle_record_button(self, channel):
-        print "record button tapped"
         self.recordButtonHandler()
 
     def configure_GPIO(self):

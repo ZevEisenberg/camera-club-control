@@ -21,19 +21,16 @@ class CameraClubControl(object):
             self.hw.switch_light(RecordingQuality.biggest, True)
             self.hw.switch_light(RecordingQuality.medium, False)
             self.hw.switch_light(RecordingQuality.fastest, False)
-            print "low quality"
         elif quality is RecordingQuality.medium:
             self.hw.play_sound(True)
             self.hw.switch_light(RecordingQuality.biggest, False)
             self.hw.switch_light(RecordingQuality.medium, True)
             self.hw.switch_light(RecordingQuality.fastest, False)
-            print "mid quality"
         elif quality is RecordingQuality.fastest:
             self.hw.play_sound(True)
             self.hw.switch_light(RecordingQuality.biggest, False)
             self.hw.switch_light(RecordingQuality.medium, False)
             self.hw.switch_light(RecordingQuality.fastest, True)
-            print "high quality"
 
     def recordButtonPressed(self):
         rec_state = self.hw.recLEDState
