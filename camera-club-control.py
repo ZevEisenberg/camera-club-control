@@ -8,12 +8,14 @@ class CameraClubControl(object):
         # TODO: read from disk
         self.recordingQuality = RecordingQuality.biggest
         self.hw = HardwareInterface(qualityButtonHandler=self.qualityButtonPressed, recordButtonHandler=self.recordButtonPressed)
-        self.camera = CameraInterface()
 
         self.hw.switch_light(RecordingQuality.biggest, True)
         self.hw.switch_light(RecordingQuality.medium, False)
         self.hw.switch_light(RecordingQuality.fastest, False)
-        self.hw.recLEDState = RecordingLEDState.off
+        self.hw.recLEDState = RecordingLEDState.blinking
+
+        self.camera = CameraInterface()
+        self.camera.recording = False
 
     def qualityButtonPressed(self, quality):
         if quality is RecordingQuality.biggest:
@@ -33,20 +35,20 @@ class CameraClubControl(object):
             self.hw.switch_light(RecordingQuality.fastest, True)
 
     def recordButtonPressed(self):
-        rec_state = self.hw.recLEDState
-        if rec_state is RecordingLEDState.on:
+        rec_state = self.camera.recording
+        if rec_state is True:
+            self.camera.recording = False
             self.hw.recLEDState = RecordingLEDState.blinking
-        elif rec_state is RecordingLEDState.blinking:
-            self.hw.recLEDState = RecordingLEDState.on
-        elif rec_state is RecordingLEDState.off:
-            self.hw.recLEDState = RecordingLEDState.blinking
+            self.hw.play_sound(False)
         else:
-            self.hw.recLEDState = RecordingLEDState.blinking
+            self.camera.recording = True
+            self.hw.recLEDState = RecordingLEDState.on
+            self.hw.play_sound(True)
 
     def cleanup(self):
         self.hw.cleanup()
         print "Goodbye"
-    
+
     def run(self):
         try:
             while True:

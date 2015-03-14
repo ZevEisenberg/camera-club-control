@@ -16,7 +16,15 @@ class CameraInterface(object):
     @recording.setter
     def recording(self, value):
         """Whether the camera is currently recording"""
-        self._recording = value
+        if value is not self._recording:
+            self._recording = value
+            if value is True:
+                print "starting recording"
+                # start recording
+            else:
+                print "stopping recording"
+                # stop recording and move file
+
 
     @property
     def recordingQuality(self):
