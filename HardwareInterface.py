@@ -47,6 +47,7 @@ class HardwareInterface(object):
 
     def cleanup(self):
         self.pwm.stop()
+        self.recLEDState = RecordingLEDState.off
         GPIO.cleanup()
 
     def play_sound(self, good):
