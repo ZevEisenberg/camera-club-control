@@ -17,20 +17,25 @@ class CameraClubControl(object):
         self.camera = CameraInterface()
         self.camera.recording = False
 
+        self.handleQualityChange(self.recordingQuality, user_initiated=False)
+
     def qualityButtonPressed(self, quality):
+        self.handleQualityChange(quality, user_initiated=True)
+
+    def handleQualityChange(self, quality, user_initiated=False):
         print RecordingQuality.string_from_recording_quality(quality)
-        if quality is RecordingQuality.biggest:
+        if user_initiated:
             self.hw.play_sound(True)
+
+        if quality is RecordingQuality.biggest:
             self.hw.switch_light(RecordingQuality.biggest, True)
             self.hw.switch_light(RecordingQuality.medium, False)
             self.hw.switch_light(RecordingQuality.fastest, False)
         elif quality is RecordingQuality.medium:
-            self.hw.play_sound(True)
             self.hw.switch_light(RecordingQuality.biggest, False)
             self.hw.switch_light(RecordingQuality.medium, True)
             self.hw.switch_light(RecordingQuality.fastest, False)
         elif quality is RecordingQuality.fastest:
-            self.hw.play_sound(True)
             self.hw.switch_light(RecordingQuality.biggest, False)
             self.hw.switch_light(RecordingQuality.medium, False)
             self.hw.switch_light(RecordingQuality.fastest, True)
