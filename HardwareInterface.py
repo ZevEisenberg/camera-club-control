@@ -52,11 +52,7 @@ class HardwareInterface(object):
         GPIO.cleanup()
 
     def play_sound(self, good):
-        frequency = None
-        if good:
-            frequency = FREQUENCY_GOOD
-        else:
-            frequency = FREQUENCY_BAD
+        frequency = FREQUENCY_GOOD if good else FREQUENCY_BAD
 
         self.pwm.ChangeFrequency(frequency)
         self.pwm.start(SPEAKER_DUTYCYCLE)
