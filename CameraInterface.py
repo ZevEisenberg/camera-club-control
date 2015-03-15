@@ -17,8 +17,9 @@ class CameraInterface(object):
 
     @staticmethod
     def file_name(quality):
-        date_format = '%Y-%m-%d_%H.%M.%S'
-        date_string = datetime.now().strftime(date_format)
+        date_format = '%Y-%m-%d_%H.%M.%S.%f'
+         # %f prints microseconds, to trim off 3 digits to print truncated miliseconds
+        date_string = datetime.now().strftime(date_format)[:-3]
         quality_string = RecordingQuality.string_from_recording_quality(quality, human_readable=False)
         extension = 'h264'
         filename = '{0}_{1}.{2}'.format(date_string, quality_string, extension)
