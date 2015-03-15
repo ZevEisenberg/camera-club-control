@@ -10,7 +10,7 @@ class CameraInterface(object):
 
     def __init__(self):
         self._recording = False
-        self._recordingQuality = None
+        self._recording_quality = None
 
     @staticmethod
     def file_name(quality):
@@ -38,7 +38,7 @@ class CameraInterface(object):
         if value is not self._recording:
             self._recording = value
             if value is True:
-                file_name = CameraInterface.file_name(self.recordingQuality)
+                file_name = CameraInterface.file_name(self.recording_quality)
                 file_path = CameraInterface.file_path(file_name, temp=True)
                 print "starting recording to file {0}".format(file_path)
                 # start recording
@@ -48,12 +48,11 @@ class CameraInterface(object):
 
 
     @property
-    def recordingQuality(self):
+    def recording_quality(self):
         """The recording quality"""
-        return self._recordingQuality
+        return self._recording_quality
 
-    @recordingQuality.setter
-    def recordingQuality(self, value):
+    @recording_quality.setter
+    def recording_quality(self, value):
         """The recording quality of the camera"""
-        print 'TODO: rename recordingQuality property to recording_quality'
-        self._recordingQuality = value
+        self._recording_quality = value

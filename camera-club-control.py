@@ -6,7 +6,7 @@ from HardwareInterface import RecordingLEDState
 class CameraClubControl(object):
     def __init__(self):
         # TODO: read from disk
-        self.recordingQuality = RecordingQuality.biggest
+        self.recording_quality = RecordingQuality.biggest
         self.hw = HardwareInterface(qualityButtonHandler=self.qualityButtonPressed, recordButtonHandler=self.recordButtonPressed)
 
         self.hw.switch_light(RecordingQuality.biggest, True)
@@ -16,9 +16,9 @@ class CameraClubControl(object):
 
         self.camera = CameraInterface()
         self.camera.recording = False
-        self.camera.recordingQuality = self.recordingQuality
+        self.camera.recording_quality = self.recording_quality
 
-        self.handleQualityChange(self.recordingQuality, user_initiated=False)
+        self.handleQualityChange(self.recording_quality, user_initiated=False)
 
     def qualityButtonPressed(self, quality):
         self.handleQualityChange(quality, user_initiated=True)

@@ -59,13 +59,13 @@ class HardwareInterface(object):
         time.sleep(BEEP_DURATION)
         self.pwm.stop()
 
-    def switch_light(self, recordingQuality, state):
+    def switch_light(self, quality, state):
         channel = None
-        if recordingQuality is RecordingQuality.biggest:
+        if quality is RecordingQuality.biggest:
             channel = BIG_LED_PIN
-        elif recordingQuality is RecordingQuality.medium:
+        elif quality is RecordingQuality.medium:
             channel = MED_LED_PIN
-        elif recordingQuality is RecordingQuality.fastest:
+        elif quality is RecordingQuality.fastest:
             channel = FAST_LED_PIN
         else:
             raise ValueError("Unknown recording quality specified")
