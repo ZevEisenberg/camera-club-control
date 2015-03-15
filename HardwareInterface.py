@@ -81,15 +81,17 @@ class HardwareInterface(object):
         if self.recLEDState is RecordingLEDState.blinking:
             GPIO.output(REC_LED_PIN, 1)
             time.sleep(REC_BLINK_TIME)
-            t = threading.Thread(target=self.blink_rec_off)
-            t.start()
+            if self.recLEDState is RecordingLEDState.blinking: # in case we were stopped during the sleep
+                t = threading.Thread(target=self.blink_rec_off)
+                t.start()
 
     def blink_rec_off(self):
         if self.recLEDState is RecordingLEDState.blinking:
             GPIO.output(REC_LED_PIN, 0)
             time.sleep(REC_BLINK_TIME)
-            t = threading.Thread(target=self.blink_rec_on)
-            t.start()
+            if self.recLEDState is RecordingLEDState.blinking: # in case we were stopped during the sleep
+                t = threading.Thread(target=self.blink_rec_on)
+                t.start()
 
     def handle_quality_button(self, channel):
         quality = None
