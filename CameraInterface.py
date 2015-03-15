@@ -1,4 +1,5 @@
 from datetime import datetime
+import picamera
 from RecordingQuality import RecordingQuality
 import os
 
@@ -15,6 +16,8 @@ class CameraInterface(object):
         self._recording = False
         # TODO: read from disk
         self._recording_quality = RecordingQuality.biggest
+        self.current_file_name = None
+        self.camera = picamera.PiCamera()
 
     @staticmethod
     def file_name(quality):
@@ -38,18 +41,26 @@ class CameraInterface(object):
         return self._recording
 
     @recording.setter
-    def recording(self, value):
+    def recording(self, recording):
         """Whether the camera is currently recording"""
-        if value is not self._recording:
-            self._recording = value
-            if value is True:
+        if recording is not self._recording:
+            self._recording = recording
+            if recording is True:
                 file_name = CameraInterface.file_name(self.recording_quality)
-                file_path = CameraInterface.file_path(file_name, temp=True)
-                print "starting recording to file {0}".format(file_path)
-                # start recording
+                self.current_file_name = file_name
+
+                self.camera.resolution = RecordingQuality.resolution(self.recording_quality)
+                self.camera.framerate = RecordingQuality.framerate(self.recording_quality)
+
+                temp_path = CameraInterface.file_path(self.current_file_name, temp=True)
+                self.camera.start_recording(temp_path)
             else:
-                print "stopping recording"
-                # stop recording and move file
+                self.camera.stop_recording()
+                temp_path = CameraInterface.file_path(self.current_file_name, temp=True)
+                final_path = CameraInterface.file_path(self.current_file_name, temp=False)
+                os.rename(temp_path, final_path)
+                self.current_file_name = None
+                # stop_recording() may throw errors, which we need to catch
 
 
     @property
