@@ -13,7 +13,8 @@ class CameraInterface(object):
 
     def __init__(self):
         self._recording = False
-        self._recording_quality = None
+        # TODO: read from disk
+        self._recording_quality = RecordingQuality.biggest
 
     @staticmethod
     def file_name(quality):
