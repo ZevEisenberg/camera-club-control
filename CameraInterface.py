@@ -5,6 +5,9 @@ import os
 REC_FOLDER_TEMP = "media/temp"
 REC_FOLDER_FINAL = "media/final"
 
+class CurrentlyRecordingError(ValueError):
+    pass
+
 class CameraInterface(object):
     """An abstraction to talk to the camera module"""
 
@@ -53,6 +56,9 @@ class CameraInterface(object):
         return self._recording_quality
 
     @recording_quality.setter
-    def recording_quality(self, value):
-        """The recording quality of the camera"""
-        self._recording_quality = value
+    def recording_quality(self, quality):
+        """The recording quality. Raises a CurrentlyRecordingError if you attempt to set the quality while the camera is recording"""
+        if self.recording:
+            raise CurrentlyRecordingError()
+        else:
+            self._recording_quality = quality
