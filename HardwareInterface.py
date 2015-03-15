@@ -42,6 +42,7 @@ class HardwareInterface(object):
     def __init__(self, qualityButtonHandler, recordButtonHandler):
         self.configure_GPIO()
         self._recLEDState = None
+        self._recording_quality = None
         self.pwm = GPIO.PWM(SPEAKER_PIN, SPEAKER_DUTYCYCLE)
         self.qualityButtonHandler = qualityButtonHandler
         self.recordButtonHandler = recordButtonHandler
@@ -152,3 +153,15 @@ class HardwareInterface(object):
             self.blink_rec_light()
         else:
             raise ValueError("Unknown recording LED state")
+
+    @property
+    def recording_quality(self):
+        """The recording quality. Refers to which LED is currently illuminated"""
+        return self._recording_quality
+
+    @recording_quality.setter
+    def recording_quality(self, quality):
+        self._recording_quality = quality
+        self.switch_light(RecordingQuality.biggest, quality is RecordingQuality.biggest)
+        self.switch_light(RecordingQuality.medium, quality is RecordingQuality.medium)
+        self.switch_light(RecordingQuality.fastest, quality is RecordingQuality.fastest)

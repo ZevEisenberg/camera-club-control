@@ -31,21 +31,9 @@ class CameraClubControl(object):
                 self.hw.play_sound(False)
                 print "TODO: flash REC light rapidly"
         else:
+            self.hw.recording_quality = quality
             if user_initiated:
                 self.hw.play_sound(True)
-
-            if quality is RecordingQuality.biggest:
-                self.hw.switch_light(RecordingQuality.biggest, True)
-                self.hw.switch_light(RecordingQuality.medium, False)
-                self.hw.switch_light(RecordingQuality.fastest, False)
-            elif quality is RecordingQuality.medium:
-                self.hw.switch_light(RecordingQuality.biggest, False)
-                self.hw.switch_light(RecordingQuality.medium, True)
-                self.hw.switch_light(RecordingQuality.fastest, False)
-            elif quality is RecordingQuality.fastest:
-                self.hw.switch_light(RecordingQuality.biggest, False)
-                self.hw.switch_light(RecordingQuality.medium, False)
-                self.hw.switch_light(RecordingQuality.fastest, True)
 
     def recordButtonPressed(self):
         rec_state = self.camera.recording
