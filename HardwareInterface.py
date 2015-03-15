@@ -34,6 +34,7 @@ SPEAKER_PIN = 7
 SPEAKER_DUTYCYCLE = 50
 FREQUENCY_GOOD = 500
 FREQUENCY_BAD = 150
+BEEP_DURATION = 0.25
 
 class HardwareInterface(object):
     """An abstraction to talk to the camera club hardware user interface"""
@@ -59,7 +60,7 @@ class HardwareInterface(object):
 
         self.pwm.ChangeFrequency(frequency)
         self.pwm.start(SPEAKER_DUTYCYCLE)
-        time.sleep(0.25)
+        time.sleep(BEEP_DURATION)
         self.pwm.stop()
 
     def switch_light(self, recordingQuality, state):
