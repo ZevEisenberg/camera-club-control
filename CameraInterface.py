@@ -1,5 +1,9 @@
-import time
+from datetime import datetime
 from RecordingQuality import RecordingQuality
+import os
+
+REC_FOLDER_TEMP = "media/temp"
+REC_FOLDER_FINAL = "media/final"
 
 class CameraInterface(object):
     """An abstraction to talk to the camera module"""
@@ -7,6 +11,21 @@ class CameraInterface(object):
     def __init__(self):
         self._recording = False
         self._recordingQuality = None
+
+    @staticmethod
+    def file_name(quality):
+        date_format = '%Y-%m-%d_%H.%M.%S'
+        date_string = datetime.now().strftime(date_format)
+        quality_string = RecordingQuality.string_from_recording_quality(quality, human_readable=False)
+        extension = 'h264'
+        filename = '{0}_{1}.{2}'.format(date_string, quality_string, extension)
+        return filename
+
+    @staticmethod
+    def file_path(filename, temp):
+        prefix = REC_FOLDER_TEMP if temp else REC_FOLDER_FINAL
+        path = os.path.join(prefix, filename)
+        return path
 
     @property
     def recording(self):
@@ -19,7 +38,9 @@ class CameraInterface(object):
         if value is not self._recording:
             self._recording = value
             if value is True:
-                print "starting recording"
+                file_name = CameraInterface.file_name(self.recordingQuality)
+                file_path = CameraInterface.file_path(file_name, temp=True)
+                print "starting recording to file {0}".format(file_path)
                 # start recording
             else:
                 print "stopping recording"
@@ -34,3 +55,5 @@ class CameraInterface(object):
     @recordingQuality.setter
     def recordingQuality(self, value):
         """The recording quality of the camera"""
+        print 'TODO: rename recordingQuality property to recording_quality'
+        self._recordingQuality = value

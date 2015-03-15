@@ -16,6 +16,7 @@ class CameraClubControl(object):
 
         self.camera = CameraInterface()
         self.camera.recording = False
+        self.camera.recordingQuality = self.recordingQuality
 
         self.handleQualityChange(self.recordingQuality, user_initiated=False)
 
@@ -53,6 +54,7 @@ class CameraClubControl(object):
 
     def cleanup(self):
         self.hw.cleanup()
+        print "WARNING: remember to clean up the current recording here."
         print "Goodbye"
 
     def run(self):
