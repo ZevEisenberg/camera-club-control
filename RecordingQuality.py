@@ -23,3 +23,19 @@ class RecordingQuality(Enum):
         dictionary_to_use = friendly_lookup if human_readable else short_lookup
 
         return dictionary_to_use[quality]
+
+    @staticmethod
+    def resolution(quality):
+        return {
+            RecordingQuality.biggest: (1920, 1080),
+            RecordingQuality.medium: (1280, 720),
+            RecordingQuality.fastest: (640, 480)
+        }[quality]
+
+    @staticmethod
+    def framerate(quality):
+        return {
+            RecordingQuality.biggest: 30,
+            RecordingQuality.medium: 49,
+            RecordingQuality.fastest: 90
+        }[quality]
